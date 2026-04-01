@@ -53,7 +53,6 @@ export function EntryPage() {
   return (
     <div className="mobile-page page-entry">
       <div className="hero-banner">
-        <p className="hero-kicker">MVP DEMO</p>
         <h1>小李川菜馆</h1>
         <p>堂食 / 外卖 / 自取一体化点餐演示</p>
       </div>
