@@ -15,7 +15,8 @@ type CartState = {
 };
 
 function makeCartItemId(payload: AddPayload): string {
-  return [payload.productId, payload.specId, payload.addonIds.sort().join(",")].join("|");
+  const sortedAddonIds = [...payload.addonIds].sort();
+  return [payload.productId, payload.specId, sortedAddonIds.join(",")].join("|");
 }
 
 function calcSubtotal(unitPrice: number, qty: number): number {
@@ -81,6 +82,18 @@ export const useCartStore = create<CartState>()(
     {
       name: "ordering-cart",
       partialize: (state) => ({ items: state.items }),
+      merge: (persistedState, currentState) => {
+        const persisted = (persistedState as Partial<{ items: CartItem[] }>) ?? {};
+        const persistedItems = Array.isArray(persisted.items) ? persisted.items : [];
+        const hasRuntimeItems = currentState.items.length > 0;
+
+        return {
+          ...currentState,
+          ...(persistedState as object),
+          // Avoid hydration race: if user already added items in memory, keep them.
+          items: hasRuntimeItems ? currentState.items : persistedItems,
+        };
+      },
       onRehydrateStorage: () => (state) => {
         state?.markHydrated();
       },

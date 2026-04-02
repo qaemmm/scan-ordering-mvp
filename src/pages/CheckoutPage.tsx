@@ -1,12 +1,12 @@
 ﻿import { Button, Card, List, TextArea, Toast } from "antd-mobile";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { api } from "../api/client";
 import { CouponSelector } from "../components/checkout/CouponSelector";
 import { PaymentMethodSelector } from "../components/checkout/PaymentMethodSelector";
 import { getCartTotal, useCartStore } from "../state/cart";
 import { useSessionStore } from "../state/session";
-import type { Coupon, PaymentMethod } from "../types/domain";
+import type { CartItem, Coupon, PaymentMethod } from "../types/domain";
 
 type CheckoutOptionsRes = { coupons: Coupon[]; paymentMethods: PaymentMethod[] };
 
@@ -24,10 +24,24 @@ export function CheckoutPage() {
   const [couponVisible, setCouponVisible] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
+  const checkoutItems = useMemo<CartItem[]>(() => {
+    if (items.length) return items;
+    if (!hydrated) return [];
+
+    try {
+      const raw = localStorage.getItem("ordering-cart");
+      if (!raw) return [];
+      const parsed = JSON.parse(raw) as { state?: { items?: CartItem[] } };
+      return Array.isArray(parsed?.state?.items) ? parsed.state.items : [];
+    } catch {
+      return [];
+    }
+  }, [hydrated, items]);
+
   useEffect(() => {
     if (!hydrated) return;
 
-    if (!items.length) {
+    if (!checkoutItems.length) {
       Toast.show({ content: "购物车为空，请先选菜", duration: 1200 });
       navigate(`/store/${storeId}/menu`);
       return;
@@ -39,16 +53,16 @@ export function CheckoutPage() {
       setMethods(res.paymentMethods);
       setMethodId(res.paymentMethods[0]?.id ?? "PAY_AT_STORE");
     })();
-  }, [hydrated, items.length, navigate, storeId]);
+  }, [checkoutItems.length, hydrated, navigate, storeId]);
 
-  const total = getCartTotal(items);
+  const total = getCartTotal(checkoutItems);
   const deliveryFee = session.mode === "DELIVERY" ? 6 : 0;
   const selectedCoupon = coupons.find((coupon) => coupon.id === couponId);
   const discount = selectedCoupon && total >= selectedCoupon.threshold ? selectedCoupon.discount : 0;
   const payable = Math.max(0, total + deliveryFee - discount);
 
   const submit = async () => {
-    if (!items.length) {
+    if (!checkoutItems.length) {
       Toast.show({ content: "购物车不能为空" });
       return;
     }
@@ -62,7 +76,7 @@ export function CheckoutPage() {
         addressId: session.addressId,
         tableNo: session.tableNo,
         pickupTime: session.pickupTime,
-        items,
+        items: checkoutItems,
         deliveryFee,
         discount,
         totalAmount: total,
@@ -111,7 +125,7 @@ export function CheckoutPage() {
 
       <Card title="商品明细">
         <List>
-          {items.map((item) => (
+          {checkoutItems.map((item) => (
             <List.Item key={item.id} description={`${item.specName} x${item.qty}`}>
               {item.productName} · HK${item.subtotal.toFixed(2)}
             </List.Item>

@@ -27,11 +27,17 @@ const tables: Table[] = [
   { tableNo: "A01", capacity: 2 },
   { tableNo: "A02", capacity: 2 },
   { tableNo: "A03", capacity: 4 },
+  { tableNo: "A04", capacity: 4 },
   { tableNo: "A05", capacity: 4 },
+  { tableNo: "A06", capacity: 2 },
   { tableNo: "B01", capacity: 4 },
+  { tableNo: "B02", capacity: 4 },
   { tableNo: "B03", capacity: 6 },
+  { tableNo: "B05", capacity: 6 },
   { tableNo: "C01", capacity: 8 },
   { tableNo: "C02", capacity: 8 },
+  { tableNo: "D01", capacity: 10 },
+  { tableNo: "D02", capacity: 10 },
 ];
 
 const addresses: Address[] = [
@@ -58,6 +64,22 @@ const addresses: Address[] = [
     detail: "新界沙田好运中心 3 座 15F",
     lng: 114.1956,
     lat: 22.3831,
+  },
+  {
+    id: "addr_4",
+    name: "何先生",
+    phone: "+852 9555 0004",
+    detail: "香港岛铜锣湾怡和街 66 号 7F",
+    lng: 114.1829,
+    lat: 22.2799,
+  },
+  {
+    id: "addr_5",
+    name: "李小姐",
+    phone: "+852 9666 0005",
+    detail: "九龙旺角弥敦道 728 号 11F",
+    lng: 114.1685,
+    lat: 22.3193,
   },
 ];
 
@@ -118,6 +140,22 @@ const menu: MenuPayload = {
       tags: ["鸡汤", "浓郁", "推荐"],
     },
     {
+      id: "p_104",
+      categoryId: "c_1",
+      name: "鲜虾蟹籽双拼云吞",
+      image: "https://images.unsplash.com/photo-1544025162-d76694265947?w=900",
+      basePrice: 46,
+      specs: [
+        { id: "s1", name: "标准份", delta: 0 },
+        { id: "s2", name: "加量份", delta: 12 },
+      ],
+      addons: [
+        { id: "a19", name: "加海苔", delta: 3 },
+        { id: "a20", name: "加鲜虾", delta: 10 },
+      ],
+      tags: ["双拼", "招牌", "海鲜"],
+    },
+    {
       id: "p_201",
       categoryId: "c_2",
       name: "鲜虾云吞面",
@@ -166,6 +204,22 @@ const menu: MenuPayload = {
       tags: ["双拼", "招牌"],
     },
     {
+      id: "p_204",
+      categoryId: "c_2",
+      name: "沙爹牛肉云吞面",
+      image: "https://images.unsplash.com/photo-1626804475297-41608ea09aeb?w=900",
+      basePrice: 48,
+      specs: [
+        { id: "s1", name: "细面", delta: 0 },
+        { id: "s2", name: "乌冬", delta: 3 },
+      ],
+      addons: [
+        { id: "a21", name: "加牛筋丸", delta: 8 },
+        { id: "a22", name: "加沙爹酱", delta: 3 },
+      ],
+      tags: ["沙爹", "浓香", "热卖"],
+    },
+    {
       id: "p_301",
       categoryId: "c_3",
       name: "咖喱鱼蛋",
@@ -200,6 +254,19 @@ const menu: MenuPayload = {
       specs: [{ id: "s1", name: "标准份", delta: 0 }],
       addons: [{ id: "a15", name: "加汤底", delta: 3 }],
       tags: ["肉丸", "热卖"],
+    },
+    {
+      id: "p_304",
+      categoryId: "c_3",
+      name: "港式萝卜牛杂",
+      image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=900",
+      basePrice: 30,
+      specs: [
+        { id: "s1", name: "小份", delta: 0 },
+        { id: "s2", name: "大份", delta: 10 },
+      ],
+      addons: [{ id: "a23", name: "加鱼豆腐", delta: 5 }],
+      tags: ["港式", "小食", "经典"],
     },
     {
       id: "p_401",
@@ -237,6 +304,29 @@ const menu: MenuPayload = {
       addons: [{ id: "a18", name: "加西米", delta: 2 }],
       tags: ["甜品", "推荐"],
     },
+    {
+      id: "p_404",
+      categoryId: "c_4",
+      name: "港式鸳鸯",
+      image: "https://images.unsplash.com/photo-1498804103079-a6351b050096?w=900",
+      basePrice: 18,
+      specs: [
+        { id: "s1", name: "热饮", delta: 0 },
+        { id: "s2", name: "冻饮", delta: 2 },
+      ],
+      addons: [{ id: "a24", name: "加炼奶", delta: 2 }],
+      tags: ["港式", "咖啡奶茶", "经典"],
+    },
+    {
+      id: "p_405",
+      categoryId: "c_4",
+      name: "陈皮红豆沙",
+      image: "https://images.unsplash.com/photo-1627735483798-0ac51442f0ca?w=900",
+      basePrice: 16,
+      specs: [{ id: "s1", name: "热甜品", delta: 0 }],
+      addons: [{ id: "a25", name: "加汤圆", delta: 4 }],
+      tags: ["甜品", "暖胃"],
+    },
   ],
 };
 
@@ -245,6 +335,8 @@ const coupons: Coupon[] = [
   { id: "cp_set", title: "双人套餐减 12", threshold: 68, discount: 12, scope: "STORE" },
   { id: "cp_night", title: "夜宵档减 8", threshold: 50, discount: 8, scope: "STORE" },
   { id: "cp_88", title: "满 88 减 15", threshold: 88, discount: 15, scope: "STORE" },
+  { id: "cp_team", title: "三人同行减 20", threshold: 128, discount: 20, scope: "STORE" },
+  { id: "cp_drink", title: "饮品加购减 6", threshold: 60, discount: 6, scope: "STORE" },
 ];
 
 const paymentMethods: PaymentMethod[] = [
