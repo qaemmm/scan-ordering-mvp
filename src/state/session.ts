@@ -1,4 +1,4 @@
-import { create } from "zustand";
+﻿import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { OrderMode, SessionContext } from "../types/domain";
 
@@ -15,7 +15,7 @@ export const useSessionStore = create<SessionState>()(
   persist(
     (set) => ({
       storeId: "s_1001",
-      mode: "DELIVERY",
+      mode: "DINE_IN",
       tableNo: undefined,
       addressId: undefined,
       pickupTime: undefined,

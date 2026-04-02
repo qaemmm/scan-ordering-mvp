@@ -1,4 +1,4 @@
-import { Button, Card, Empty, Segmented, Space, Spin, Typography, message } from "antd";
+﻿import { Button, Card, Empty, Segmented, Space, Spin, Typography, message } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import QRCode from "qrcode";
@@ -56,10 +56,11 @@ export function MerchantOrdersPage() {
         }
       } catch {
         if (!disposed) {
-          message.error("二维码生成失败");
+          message.error("桌码生成失败");
         }
       }
     })();
+
     return () => {
       disposed = true;
     };
@@ -72,9 +73,9 @@ export function MerchantOrdersPage() {
       void fetchOrders(tab);
       return;
     }
+
     if (action === "CANCELLED") {
-      const reason =
-        window.prompt("请输入拒单原因（例如：菜品售罄）", "菜品售罄")?.trim() || "商家拒单";
+      const reason = window.prompt("请输入拒单原因（例如：菜品售罄）", "菜品售罄")?.trim() || "商家拒单";
       await api.post(`/api/merchant/orders/${orderId}/status`, {
         nextStatus: action,
         reason,
@@ -83,6 +84,7 @@ export function MerchantOrdersPage() {
       void fetchOrders(tab);
       return;
     }
+
     await api.post(`/api/merchant/orders/${orderId}/status`, { nextStatus: action });
     message.success("状态已更新");
     void fetchOrders(tab);
@@ -95,6 +97,7 @@ export function MerchantOrdersPage() {
         { label: "拒单", status: "CANCELLED" as const, danger: true },
       ];
     }
+
     if (tab === "PREPARING") {
       if (order.mode === "DELIVERY") {
         return [
@@ -103,12 +106,14 @@ export function MerchantOrdersPage() {
           { label: "完成", status: "DONE" as const },
         ];
       }
+
       return [
         { label: "制作中", status: "PREPARING" as const },
         { label: "可取餐", status: "READY_FOR_PICKUP" as const },
         { label: "完成", status: "DONE" as const },
       ];
     }
+
     return [];
   };
 
@@ -126,7 +131,10 @@ export function MerchantOrdersPage() {
           <Typography.Title level={3} style={{ margin: 0 }}>
             商家订单看板
           </Typography.Title>
-          <Button onClick={() => navigate("/")}>返回用户端</Button>
+          <Space>
+            <Typography.Text type="secondary">内部演示环境</Typography.Text>
+            <Button onClick={() => navigate("/")}>返回用户端</Button>
+          </Space>
         </div>
 
         <Segmented
@@ -139,7 +147,7 @@ export function MerchantOrdersPage() {
           onChange={(val) => setTab(val as MerchantTab)}
         />
 
-        <Card title="二维码管理（扫码点单）" size="small">
+        <Card title="桌码管理（扫码点单）" size="small">
           {qrEntries.length === 0 ? (
             <Spin />
           ) : (
@@ -153,7 +161,7 @@ export function MerchantOrdersPage() {
                   </div>
                   <Space size={8}>
                     <Button size="small" onClick={() => downloadCode(entry)}>
-                      下载PNG
+                      下载 PNG
                     </Button>
                     <Button
                       size="small"

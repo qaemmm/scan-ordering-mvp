@@ -1,159 +1,152 @@
-# 点餐系统 MVP — 需求规格
+﻿# 香港馄饨扫码点餐 Demo - 需求规格
 
 ## 项目概览
 | 项目 | 说明 |
 |------|------|
-| 产品名称 | 点餐系统 MVP Demo |
+| 产品名称 | 香港馄饨扫码点餐 Demo |
 | 技术栈 | React + TypeScript + Vite + React Router + Ant Design Mobile + Ant Design + MSW |
-| 目标用户 | 用户端：堂食/外卖/自取点餐用户；商家端：店员/店长 |
-| 交付目标 | 纯前端 + Mock API 演示闭环，不接真实后端 |
-| 设计风格 | 清晰、可读、移动端优先（用户端），桌面信息密度优先（商家端） |
+| 目标用户 | 到店顾客（扫码点单） + 餐饮商家/店员（接单与履约） |
+| 交付目标 | 内部演示版 / 销售评审版，不对接真实后端 |
+| 设计风格 | 简洁、扁平、浅色、偏 Apple-like，移动端优先 |
+
+## 全局原则
+- 保留现有 5 条主路由，不新增主流程页面。
+- 首版聚焦扫码点餐闭环，避免功能膨胀。
+- 支付能力为“预留/模拟”，不做本地真实支付接入（例如 GCash）。
+- AI 先做轻量推荐与问答展示，不做完整自然语言下单执行。
+- SKU 可编辑通过“结构化 mock 数据 + 配置化字段”体现，不实现完整商品后台。
 
 ## 设计规范
-- 主色调：`#E85D2A`（品牌橙）
-- 辅助色：`#1F2937`（主文本）、`#64748B`（次文本）、`#F8FAFC`（背景）
+- 主色：`#111827`（深灰文本） / `#F8FAFC`（浅背景）
+- 品牌点缀：`#0EA5E9`（冷色强调）
 - 成功/警告/失败：`#16A34A` / `#D97706` / `#DC2626`
-- 圆角：卡片 `12px`，按钮 `10px`
-- 字体：`PingFang SC, Microsoft YaHei, sans-serif`
-- 间距：4pt 栅格（4/8/12/16/24）
-- 动效：页面进入淡入 180ms；抽屉/弹窗 220ms
+- 圆角：卡片 `14px`，按钮 `10px`
+- 阴影：轻阴影，避免重拟物
+- 字体：`PingFang SC, SF Pro Text, Microsoft YaHei, sans-serif`
+- 动效：页面切换 180ms 内，交互反馈简短克制
 
-## 页面/接口清单
+## 页面与路由
 
-### 页面 1：入店与方式选择页 `/` `[P0]`
-**布局：** 门店信息卡 + 方式选择分段控件（堂食/外卖/自取）+ 条件输入区（桌号或地址）+ 进入菜单按钮。  
+### 页面 1：品牌入口页 `/` `[P0]`
+**布局：**
+- 品牌头图 + 门店信息
+- 点餐模式选择（堂食/外带）
+- 堂食桌号或取餐方式信息
+- “扫码点单入口”“进入菜单”按钮
+- 轻量 AI 推荐卡（今日招牌/新人建议）
+
 **交互：**
-- 选择 `DINE_IN`：必须绑定桌号，可填写人数。
-- 选择 `DELIVERY`：必须选择地址。
-- 选择 `PICKUP`：选择取餐时间（立即/预约），不新增页面。
-- 进入菜单前校验必填，失败给错误提示。
-**Mock 数据：**
-- `Store`: `id/name/minOrderAmount/deliveryFee/supportModes`
-- `Table`: `tableNo/capacity`
-- `Address`: `id/name/phone/detail/lng/lat`
+- 堂食需绑定桌号后才能进入菜单。
+- 扫码可自动带入 `storeId/mode/tableNo`。
+- AI 卡片支持快速问题入口：
+  - “本店招牌是什么”
+  - “两个人怎么点更合适”
+
 **接口：**
 - `GET /api/stores/:storeId`
-- `GET /api/users/me/addresses`
+- `GET /api/users/me/addresses`（保留兼容，首版可弱化展示）
 
 ### 页面 2：菜单页 `/store/:storeId/menu` `[P0]`
-**布局：** 分类栏 + 菜品列表 + 购物车浮条 + 规格加料弹窗 + 购物车抽屉。  
+**布局：**
+- 分类导航（招牌馄饨/汤底/小食/饮品）
+- 菜品列表 + 规格/加料弹窗
+- 购物车浮条 + 抽屉
+- AI 问答入口（轻量）
+
 **交互：**
-- 分类切换后滚动到对应分组。
-- 点击菜品打开规格/加料弹窗，确认后加购。
-- 浮条显示件数和小计，购物车可加减删。
-- 购物车为空时“去结算”不可用。
-**Mock 数据：**
-- `MenuCategory`: `id/name/sort`
-- `MenuItem`: `id/categoryId/name/basePrice/specs/addons/tags/image`
-- `CartItem`: `id/productId/specId/addonIds/qty/unitPrice/subtotal`
+- 菜品支持规格、加料、数量调整。
+- 支持搜索与分类筛选。
+- AI 入口只做推荐与引导，不直接执行复杂多轮下单。
+- AI 推荐结果可一键“加入购物车”（调用现有加购逻辑）。
+
 **接口：**
 - `GET /api/stores/:storeId/menu`
-- `POST /api/cart/validate`（可选，默认返回通过）
+- `POST /api/cart/validate`（保留）
+- `POST /api/ai/recommend`（mock，新增长度受控的推荐结果）
 
 ### 页面 3：结算页 `/store/:storeId/checkout` `[P0]`
-**布局：** 订单信息区（地址/桌号/取餐信息）+ 优惠券区 + 支付方式区 + 金额明细区 + 提交按钮。  
+**布局：**
+- 订单信息（桌号/取餐方式）
+- 商品明细
+- 优惠信息（展示可用优惠）
+- 支付方式区域（首版展示“到店付款/支付预留”）
+- 提交订单按钮
+
 **交互：**
-- 外卖显示地址与送达时间；堂食显示桌号；自取显示取餐时间。
-- 优惠券单选，实时刷新应付金额。
-- 支付方式按模式可用性控制（例如堂食可到店支付）。
-- 提交订单后进入创建中状态，成功跳订单详情。
-**Mock 数据：**
-- `Coupon`: `id/title/threshold/discount/scope`
-- `PaymentMethod`: `id/name/enabledModes`
-- `CheckoutSummary`: `itemsTotal/discount/deliveryFee/payable`
+- 支持下单提交并生成订单。
+- 支付采用模拟口径，不引入真实本地支付 SDK。
+- 文案明确“演示版支付能力预留”。
+
 **接口：**
 - `POST /api/orders`
-- `POST /api/payments/create`
-- `POST /api/payments/confirm`
+- `POST /api/payments/create`（保留模拟）
+- `POST /api/payments/confirm`（保留模拟）
 
-### 页面 4：订单详情/状态追踪页 `/orders/:orderId` `[P0]`
-**布局：** 状态头部 + ETA/模式信息 + 时间线 + 订单商品列表 + 地图占位（外卖）+ 操作区。  
+### 页面 4：订单详情页 `/orders/:orderId` `[P0]`
+**布局：**
+- 订单状态头部
+- 商品明细
+- 时间线（下单/接单/制作中/完成）
+- 操作区（再来一单、查看商家看板入口）
+
 **交互：**
-- 状态展示：`PENDING_PAYMENT/PAID/ACCEPTED/PREPARING/DELIVERING/READY_FOR_PICKUP/DONE/CANCELLED`
-- 每 3-5 秒轮询订单状态并更新时间线。
-- 外卖显示 ETA 和地图占位；堂食显示桌号；自取显示取餐码/时间。
-- `PENDING_PAYMENT` 和 `ACCEPTED` 可取消，其他状态不可取消。
-**Mock 数据：**
-- `Order`: `id/mode/payStatus/orderStatus/estimateArrivalTime/items/discounts/address/tableNo`
-- `TimelineEvent`: `code/text/ts/operator`
+- 每 3-5 秒轮询订单状态。
+- 商家状态变更后，用户侧应在 5 秒内可见。
+
 **接口：**
 - `GET /api/orders/:orderId`
 - `GET /api/orders/:orderId/timeline`
-- `POST /api/orders/:orderId/cancel`（可选）
 
-### 页面 5：商家订单看板页 `/merchant/orders` `[P0]`
-**布局：** 顶部筛选 + 三栏列表（新订单/制作中/已完成）+ 订单卡操作按钮。  
+### 页面 5：商家看板 `/merchant/orders` `[P0]`
+**布局：**
+- 订单分栏（新订单/制作中/已完成）
+- 订单卡操作
+- 桌码二维码管理
+
 **交互：**
-- 新单可接单/拒单。
-- 制作中可改为出餐完成（堂食/自取）或配送中（外卖）。
-- 已完成仅查看。
-- 改状态后用户端轮询应看到变化。
-**Mock 数据：**
-- `MerchantOrder`: `id/mode/orderStatus/payStatus/itemsSummary/note/contact`
+- 新单可接单、拒单（理由可选）。
+- 制作中可推进到完成。
+- 状态流转与用户侧订单详情联动。
+
 **接口：**
 - `GET /api/merchant/orders?status=NEW|PREPARING|DONE`
 - `POST /api/merchant/orders/:id/accept`
 - `POST /api/merchant/orders/:id/status`
 
-## 全局 Mock 数据定义
+## Mock 数据定义（首版）
+- 门店：香港馄饨品牌语境（店名、营业时段、桌号）。
+- 菜单分类建议：
+  - `WONTON_SIGNATURE` 招牌馄饨
+  - `BROTH` 汤底选择
+  - `SNACK` 小食
+  - `DRINK` 饮品
+- 菜品字段保留现有结构：`id/name/basePrice/specs/addons/tags/image`。
+- SKU 可编辑体现方式：
+  - 通过 `src/mocks/db.ts` 中结构化菜单配置编辑。
+  - 规格（大/小、配料）与加料项可增删。
 
-```ts
-type OrderMode = "DINE_IN" | "DELIVERY" | "PICKUP";
-type OrderStatus =
-  | "PENDING_PAYMENT"
-  | "PAID"
-  | "ACCEPTED"
-  | "PREPARING"
-  | "DELIVERING"
-  | "READY_FOR_PICKUP"
-  | "DONE"
-  | "CANCELLED";
+## AI 轻量能力说明
+- 首版只做以下能力：
+  - 招牌推荐
+  - 吃什么建议
+  - 套餐引导
+  - 问答入口
+- 不做以下能力：
+  - 完整自然语言 Agent 下单
+  - 营销自动生成图文/视频
+  - AI 店长/行业老板分析中台
 
-interface Store {
-  id: string;
-  name: string;
-  minOrderAmount: number;
-  deliveryFee: number;
-  supportModes: OrderMode[];
-}
+## 演示路径（销售内部）
+1. 进入 `/`，模拟顾客到店扫码进入。
+2. 在入口页查看招牌推荐，进入菜单。
+3. 菜单页选择香港馄饨相关 SKU（含规格或加料）加入购物车。
+4. 结算页提交订单（支付为模拟/预留口径）。
+5. 进入订单详情页，看到初始状态与时间线。
+6. 打开 `/merchant/orders` 接单并推进状态。
+7. 返回订单详情，确认状态同步更新。
 
-interface SessionContext {
-  storeId: string;
-  mode: OrderMode;
-  tableNo?: string;
-  addressId?: string;
-  pickupTime?: string;
-}
-```
-
-统一约束：
-- 所有金额单位统一为元，保留两位小数。
-- 时间统一使用本地时区字符串和 Unix 时间戳双存储。
-- 状态变更以订单主状态为准，支付状态独立维护。
-
-## 交互规范
-- 全局 loading：按钮提交态最短 600ms，普通列表最短骨架 400ms。
-- 成功反馈：右上角轻提示 1.5s；关键动作（下单）显示“成功并跳转”。
-- 失败反馈：接口错误统一 Toast + 页内重试入口。
-- 空态至少覆盖：菜单空、购物车空、订单空、商家无新单。
-- 网络弱网处理：轮询失败连续 3 次后显示“状态同步延迟”提示，不中断页面使用。
-- 路由保护：
-- 结算页必须有购物车数据。
-- 订单页必须有 `orderId`。
-- 商家页无需登录，但默认展示“Demo 环境”标识。
-
-## 演示路线
-1. 进入 `/`，选择 `DELIVERY`，选择地址，进入菜单页。  
-2. 在菜单页选择 1 个含规格/加料的菜品加购，进入结算页。  
-3. 在结算页选择优惠券与支付方式，提交订单并模拟支付成功。  
-4. 跳转订单详情页，确认状态为 `PAID` 且时间线存在“订单提交/支付成功”。  
-5. 打开 `/merchant/orders`，接单并改为 `PREPARING`。  
-6. 回到订单详情页，5 秒内看到状态更新。  
-7. 商家端继续改为 `DONE`，用户端最终状态完成，演示闭环结束。  
-
-## 非目标（本期不做）
-- 真实支付通道接入
-- 真实地图 SDK 和轨迹
-- 复杂营销规则（叠券、阶梯满减）
-- 会员体系和真实认证
-- 推送服务端（仅轮询模拟）
+## 非目标（本轮不做）
+- GCash 或其他本地支付真实对接
+- 自动营销素材生成与分发
+- 会员营销系统扩展功能
+- 复杂 AI Agent 下单与经营分析平台化能力

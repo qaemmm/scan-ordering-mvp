@@ -1,10 +1,10 @@
-﻿# 点餐系统 MVP Demo
+﻿# 香港馄饨扫码点餐 Demo
 
-React + Vite 的纯前端点餐演示项目，支持：
-- 用户端点餐闭环（堂食 / 外卖 / 自取）
+用于销售内部评审的前端演示项目（React + Vite），核心能力：
+- 顾客端扫码点单闭环（堂食 / 外送 / 自取）
 - 商家端接单与状态流转
-- 扫码点单（二维码链接、摄像头扫码、手动兜底）
-- MSW 模拟 API（可在生产环境按开关启用）
+- 轻量 AI 推荐与问答（招牌推荐、双人点单建议）
+- MSW 模拟 API（不接真实后端）
 
 ## 本地运行
 
@@ -19,54 +19,42 @@ npm run dev
 npm run build
 ```
 
-## 关键环境变量
+## 演示定位
 
-在根目录创建 `.env`，或在 Vercel 项目环境变量中设置：
+- 当前版本为**内部演示版**，用于销售对齐与需求澄清。
+- 支付能力为**演示预留**，不对接 GCash 等本地真实支付。
+- AI 能力为轻量推荐，不做完整自然语言 Agent 下单。
+
+## 环境变量
+
+在根目录创建 `.env`，或在 Vercel 配置：
 
 ```bash
 VITE_ENABLE_MSW=true
 ```
 
 说明：
-- `true`：无论 dev / prod 都启用 MSW（适合 Demo 站）
-- 未设置或 `false`：仅本地 dev 启用 MSW
+- `true`：dev/prod 都启用 MSW（适合演示站）
+- 未设置或 `false`：仅本地 dev 启用
 
-## 扫码点单链接格式
-
-二维码目标链接统一格式：
+## 扫码链接格式
 
 ```text
 https://<your-domain>/scan?storeId=s_1001&mode=DINE_IN&tableNo=A01
 ```
 
-字段规则：
+字段：
 - `storeId`：门店 ID
 - `mode`：`DINE_IN | DELIVERY | PICKUP`
 - `tableNo`：堂食桌号（`DINE_IN` 必填）
 
-## GitHub + Vercel + 域名部署
+## 部署（Vercel）
 
-1. 将仓库推到 GitHub。
-2. 在 Vercel 导入该仓库，Framework 选择 `Vite`。
+1. 推送仓库到 GitHub。
+2. 在 Vercel 导入项目（Framework 选 `Vite`）。
 3. Build Command：`npm run build`
 4. Output Directory：`dist`
-5. 在 Vercel 设置环境变量 `VITE_ENABLE_MSW=true`（至少 `Production` 必须设置）。
-6. 绑定自定义域名并完成 DNS 配置（Vercel 自动签发 HTTPS）。
+5. 设置环境变量 `VITE_ENABLE_MSW=true`（至少 Production）。
+6. 如需自定义域名，完成 DNS 绑定。
 
-路由回退已通过 `vercel.json` 配置，刷新 `/scan`、`/orders/...`、`/merchant/orders` 不会 404。
-
-## 云端常见问题排查
-
-如果线上页面出现“加载中...”长期不消失，通常是生产环境没拿到 mock API：
-
-1. 确认 Vercel 项目环境变量里 `VITE_ENABLE_MSW=true` 已配置到 `Production`。
-2. 触发一次重新部署（Redeploy）。
-3. 浏览器强制刷新（Windows: `Ctrl + F5`，macOS: `Cmd + Shift + R`）。
-4. 打开控制台确认有 MSW 日志，且 `/api/*` 请求返回 200。
-
-## 本次补充数据
-
-- 桌号从 3 张扩展到 11 张（含 A/B/C/D 区）。
-- 地址从 2 条扩展到 4 条。
-- 菜品从 15 道扩展到 25 道，新增汤羹分类。
-- 优惠券从 2 张扩展到 4 张。
+`vercel.json` 已配置路由回退，刷新 `/scan`、`/orders/...`、`/merchant/orders` 不会 404。

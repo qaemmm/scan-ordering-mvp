@@ -1,4 +1,4 @@
-import { Button, Card, DatePicker, Form, Input, List, Radio, Selector, Toast } from "antd-mobile";
+﻿import { Button, Card, DatePicker, Form, Input, List, Radio, Selector, Toast } from "antd-mobile";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../api/client";
@@ -21,6 +21,7 @@ export function EntryPage() {
     setAddressId,
     setPickupTime,
   } = useSessionStore();
+
   const [store, setStore] = useState<Store | null>(null);
   const [tables, setTables] = useState<Table[]>([]);
   const [addresses, setAddresses] = useState<Address[]>([]);
@@ -53,12 +54,26 @@ export function EntryPage() {
   return (
     <div className="mobile-page page-entry">
       <div className="hero-banner">
-        <h1>小李川菜馆</h1>
-        <p>堂食 / 外卖 / 自取一体化点餐演示</p>
+        <p className="hero-kicker">HONG KONG WONTON</p>
+        <h1>港味馄饨·中环店</h1>
+        <p>扫码即点 · 出餐可追踪 · 商家实时接单</p>
       </div>
 
       <Card title={store?.name ?? "加载中..."}>
-        <p>起送价：¥{store?.minOrderAmount ?? "-"}，配送费：¥{store?.deliveryFee ?? "-"}</p>
+        <p>
+          起送价：HK${store?.minOrderAmount ?? "-"}，配送费：HK${store?.deliveryFee ?? "-"}
+        </p>
+      </Card>
+
+      <Card title="今日招牌推荐">
+        <div className="ai-entry-list">
+          <button type="button" className="ai-entry-chip" onClick={() => navigate(`/store/${storeId}/menu`)}>
+            本店招牌是什么？
+          </button>
+          <button type="button" className="ai-entry-chip" onClick={() => navigate(`/store/${storeId}/menu`)}>
+            两个人怎么点更稳妥？
+          </button>
+        </div>
       </Card>
 
       <Card title="选择点餐方式">
@@ -67,10 +82,10 @@ export function EntryPage() {
           value={[mode]}
           options={[
             { label: "堂食", value: "DINE_IN" },
-            { label: "外卖", value: "DELIVERY" },
+            { label: "外送", value: "DELIVERY" },
             { label: "自取", value: "PICKUP" },
           ]}
-          onChange={(arr) => setMode((arr[0] as OrderMode) ?? "DELIVERY")}
+          onChange={(arr) => setMode((arr[0] as OrderMode) ?? "DINE_IN")}
         />
       </Card>
 
@@ -94,7 +109,9 @@ export function EntryPage() {
             <List>
               {addresses.map((address) => (
                 <List.Item key={address.id} prefix={<Radio value={address.id}> </Radio>}>
-                  <div>{address.name} {address.phone}</div>
+                  <div>
+                    {address.name} {address.phone}
+                  </div>
                   <div className="muted">{address.detail}</div>
                 </List.Item>
               ))}
@@ -104,10 +121,10 @@ export function EntryPage() {
       )}
 
       {mode === "PICKUP" && (
-        <Card title="取餐时间">
+        <Card title="自取时间">
           <Form layout="horizontal">
-            <Form.Item label="取餐备注">
-              <Input placeholder="如：15分钟后到店" />
+            <Form.Item label="备注">
+              <Input placeholder="例如：20 分钟后到店" />
             </Form.Item>
           </Form>
           <DatePicker
@@ -117,7 +134,7 @@ export function EntryPage() {
           >
             {(val) => (
               <Button block>
-                {val ? `已选 ${new Date(val).toLocaleString()}` : "选择取餐时间"}
+                {val ? `已选：${new Date(val).toLocaleString()}` : "选择自取时间"}
               </Button>
             )}
           </DatePicker>
@@ -133,7 +150,7 @@ export function EntryPage() {
       </Button>
 
       <Button block fill="none" onClick={() => navigate("/merchant/orders")}>
-        进入商家看板（Demo）
+        进入商家看板（内部演示）
       </Button>
     </div>
   );

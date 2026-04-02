@@ -1,4 +1,4 @@
-import { Button, Card, DotLoading, Empty, List, Tag, Toast } from "antd-mobile";
+﻿import { Button, Card, DotLoading, Empty, List, Tag, Toast } from "antd-mobile";
 import { useNavigate, useParams } from "react-router-dom";
 import { api } from "../api/client";
 import { Timeline } from "../components/order/Timeline";
@@ -21,7 +21,7 @@ function statusLabel(status: OrderStatus) {
 
 function modeLabel(mode: string) {
   if (mode === "DINE_IN") return "堂食";
-  if (mode === "DELIVERY") return "外卖";
+  if (mode === "DELIVERY") return "外送";
   if (mode === "PICKUP") return "自取";
   return mode;
 }
@@ -68,13 +68,13 @@ export function OrderDetailPage() {
           <p>预计送达：{new Date(order.estimateArrivalTime * 1000).toLocaleTimeString()}</p>
         )}
         {order.tableNo && <p>桌号：{order.tableNo}</p>}
-        {order.pickupTime && <p>取餐时间：{new Date(order.pickupTime).toLocaleString()}</p>}
+        {order.pickupTime && <p>自取时间：{new Date(order.pickupTime).toLocaleString()}</p>}
       </Card>
 
       {order.mode === "DELIVERY" && (
-        <Card title="地图占位">
+        <Card title="配送地图（演示占位）">
           <div className="map-placeholder">
-            <span>配送地图预览（Demo 占位）</span>
+            <span>这里可接入真实地图与骑手轨迹</span>
           </div>
         </Card>
       )}
@@ -83,11 +83,11 @@ export function OrderDetailPage() {
         <List>
           {order.items.map((item) => (
             <List.Item key={item.id} description={`${item.specName} x${item.qty}`}>
-              {item.productName} · ¥{item.subtotal.toFixed(2)}
+              {item.productName} · HK${item.subtotal.toFixed(2)}
             </List.Item>
           ))}
         </List>
-        <h4 style={{ marginTop: 12 }}>应付：¥{order.payableAmount.toFixed(2)}</h4>
+        <h4 style={{ marginTop: 12 }}>应付：HK${order.payableAmount.toFixed(2)}</h4>
       </Card>
 
       <Card title="状态时间线">
@@ -100,9 +100,11 @@ export function OrderDetailPage() {
             取消订单
           </Button>
         )}
+
         <Button fill="outline" onClick={() => navigate("/")}>
           再来一单
         </Button>
+
         {order.orderStatus === "DONE" && (
           <Button
             fill="outline"
@@ -113,6 +115,7 @@ export function OrderDetailPage() {
             去评价
           </Button>
         )}
+
         <Button fill="none" onClick={() => navigate("/merchant/orders")}>
           查看商家看板
         </Button>

@@ -1,4 +1,4 @@
-import { Button, Checkbox, Divider, Popup, Radio, Space } from "antd-mobile";
+﻿import { Button, Checkbox, Divider, Popup, Radio, Space } from "antd-mobile";
 import { useState } from "react";
 import type { MenuItem } from "../../types/domain";
 
@@ -34,7 +34,7 @@ export function SpecAddonModal({ visible, item, onClose, onConfirm }: Props) {
     <Popup visible={visible} onMaskClick={onClose} bodyStyle={{ borderRadius: "12px 12px 0 0" }}>
       <div className="sheet-body">
         <h3>{item.name}</h3>
-        <p className="muted">选择规格和加料</p>
+        <p className="muted">选择规格与加料</p>
         <Divider />
 
         <div>
@@ -80,7 +80,7 @@ export function SpecAddonModal({ visible, item, onClose, onConfirm }: Props) {
             })
           }
         >
-          加入购物车 ¥{unitPrice.toFixed(2)}
+          加入购物车 HK${unitPrice.toFixed(2)}
         </Button>
       </div>
     </Popup>

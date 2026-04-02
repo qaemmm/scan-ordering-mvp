@@ -1,4 +1,4 @@
-import { Button, Empty, List, Popup, Space } from "antd-mobile";
+﻿import { Button, Empty, List, Popup, Space } from "antd-mobile";
 import type { CartItem } from "../../types/domain";
 
 type Props = {
@@ -43,7 +43,7 @@ export function CartDrawer({ visible, items, onClose, onChangeQty, onClear }: Pr
                   </Space>
                 }
               >
-                {item.productName} · ¥{item.subtotal.toFixed(2)}
+                {item.productName} · HK${item.subtotal.toFixed(2)}
               </List.Item>
             ))}
           </List>

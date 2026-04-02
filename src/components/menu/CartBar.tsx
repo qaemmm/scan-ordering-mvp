@@ -1,4 +1,4 @@
-import { Badge, Button } from "antd-mobile";
+﻿import { Badge, Button } from "antd-mobile";
 
 type Props = {
   count: number;
@@ -16,7 +16,7 @@ export function CartBar({ count, total, canCheckout, onOpen, onCheckout }: Props
           <div className="cart-dot">🛒</div>
         </Badge>
         <div>
-          <div className="cart-total">¥{total.toFixed(2)}</div>
+          <div className="cart-total">HK${total.toFixed(2)}</div>
           <div className="muted">点击查看购物车</div>
         </div>
       </div>

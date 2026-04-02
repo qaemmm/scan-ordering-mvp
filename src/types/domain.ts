@@ -1,4 +1,4 @@
-export type OrderMode = "DINE_IN" | "DELIVERY" | "PICKUP";
+﻿export type OrderMode = "DINE_IN" | "DELIVERY" | "PICKUP";
 export type ScanState = "SCAN_IDLE" | "SCAN_ACTIVE" | "SCAN_SUCCESS" | "SCAN_FALLBACK";
 
 export type OrderStatus =
@@ -136,4 +136,15 @@ export interface SessionContext {
 export interface MenuPayload {
   categories: MenuCategory[];
   items: MenuItem[];
+}
+
+export interface AiRecommendPick {
+  productId: string;
+  reason: string;
+}
+
+export interface AiRecommendResponse {
+  answer: string;
+  picks: AiRecommendPick[];
+  suggestedQuestions: string[];
 }

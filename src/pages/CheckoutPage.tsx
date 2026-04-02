@@ -1,4 +1,4 @@
-import { Button, Card, List, TextArea, Toast } from "antd-mobile";
+﻿import { Button, Card, List, TextArea, Toast } from "antd-mobile";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { api } from "../api/client";
@@ -15,38 +15,36 @@ export function CheckoutPage() {
   const { storeId = "s_1001" } = useParams();
   const session = useSessionStore();
   const { items, clear, hydrated } = useCartStore();
+
   const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [methods, setMethods] = useState<PaymentMethod[]>([]);
   const [couponId, setCouponId] = useState<string | undefined>(undefined);
-  const [methodId, setMethodId] = useState<string>("ONLINE");
+  const [methodId, setMethodId] = useState<string>("PAY_AT_STORE");
   const [note, setNote] = useState("");
   const [couponVisible, setCouponVisible] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [simulateCancel, setSimulateCancel] = useState(false);
 
   useEffect(() => {
-    if (!hydrated) {
-      return;
-    }
+    if (!hydrated) return;
 
     if (!items.length) {
-      Toast.show({ content: "购物车为空，先去选菜", duration: 1200 });
+      Toast.show({ content: "购物车为空，请先选菜", duration: 1200 });
       navigate(`/store/${storeId}/menu`);
       return;
     }
+
     void (async () => {
       const res = await api.get<CheckoutOptionsRes>("/api/checkout/options");
       setCoupons(res.coupons);
       setMethods(res.paymentMethods);
-      setMethodId(res.paymentMethods[0]?.id ?? "ONLINE");
+      setMethodId(res.paymentMethods[0]?.id ?? "PAY_AT_STORE");
     })();
   }, [hydrated, items.length, navigate, storeId]);
 
   const total = getCartTotal(items);
-  const deliveryFee = session.mode === "DELIVERY" ? 3 : 0;
+  const deliveryFee = session.mode === "DELIVERY" ? 6 : 0;
   const selectedCoupon = coupons.find((coupon) => coupon.id === couponId);
-  const discount =
-    selectedCoupon && total >= selectedCoupon.threshold ? selectedCoupon.discount : 0;
+  const discount = selectedCoupon && total >= selectedCoupon.threshold ? selectedCoupon.discount : 0;
   const payable = Math.max(0, total + deliveryFee - discount);
 
   const submit = async () => {
@@ -54,8 +52,10 @@ export function CheckoutPage() {
       Toast.show({ content: "购物车不能为空" });
       return;
     }
+
     setSubmitting(true);
     let currentOrderId = "";
+
     try {
       const orderRes = await api.post<{ orderId: string }>("/api/orders", {
         mode: session.mode,
@@ -69,12 +69,11 @@ export function CheckoutPage() {
         payableAmount: payable,
         note,
       });
+
       currentOrderId = orderRes.orderId;
       await api.post("/api/payments/create", { orderId: orderRes.orderId, methodId });
-      await api.post("/api/payments/confirm", {
-        orderId: orderRes.orderId,
-        simulateCancel,
-      });
+      await api.post("/api/payments/confirm", { orderId: orderRes.orderId, simulateCancel: false });
+
       clear();
       Toast.show({ content: "下单成功", duration: 1200 });
       navigate(`/orders/${orderRes.orderId}`);
@@ -107,14 +106,14 @@ export function CheckoutPage() {
       <Card title="订单信息">
         {session.mode === "DELIVERY" && <p>地址：{session.addressId ?? "未选择"}</p>}
         {session.mode === "DINE_IN" && <p>桌号：{session.tableNo ?? "未选择"}</p>}
-        {session.mode === "PICKUP" && <p>取餐时间：{session.pickupTime ?? "未选择"}</p>}
+        {session.mode === "PICKUP" && <p>自取时间：{session.pickupTime ?? "未选择"}</p>}
       </Card>
 
       <Card title="商品明细">
         <List>
           {items.map((item) => (
             <List.Item key={item.id} description={`${item.specName} x${item.qty}`}>
-              {item.productName} · ¥{item.subtotal.toFixed(2)}
+              {item.productName} · HK${item.subtotal.toFixed(2)}
             </List.Item>
           ))}
         </List>
@@ -126,34 +125,26 @@ export function CheckoutPage() {
         </Button>
       </Card>
 
-      <Card title="支付方式">
+      <Card title="支付方式（演示口径）">
         <PaymentMethodSelector methods={methods} mode={session.mode} value={methodId} onChange={setMethodId} />
-        <div className="pay-sim-row">
-          <span className="muted">支付模拟：</span>
-          <Button
-            size="small"
-            color={simulateCancel ? "warning" : "success"}
-            fill="outline"
-            onClick={() => setSimulateCancel((v) => !v)}
-          >
-            {simulateCancel ? "当前：取消支付" : "当前：支付成功"}
-          </Button>
-        </div>
+        <p className="muted" style={{ marginTop: 8 }}>
+          首版仅做支付能力预留，不接入本地真实支付通道。
+        </p>
       </Card>
 
       <Card title="备注">
-        <TextArea value={note} onChange={setNote} placeholder="如：少辣、不要香菜" maxLength={80} />
+        <TextArea value={note} onChange={setNote} placeholder="例如：不要香菜、少冰" maxLength={80} />
       </Card>
 
       <Card title="金额明细">
-        <p>商品总价：¥{total.toFixed(2)}</p>
-        <p>配送费：¥{deliveryFee.toFixed(2)}</p>
-        <p>优惠：-¥{discount.toFixed(2)}</p>
-        <h3>应付：¥{payable.toFixed(2)}</h3>
+        <p>商品总价：HK${total.toFixed(2)}</p>
+        <p>配送费：HK${deliveryFee.toFixed(2)}</p>
+        <p>优惠：-HK${discount.toFixed(2)}</p>
+        <h3>应付：HK${payable.toFixed(2)}</h3>
       </Card>
 
       <Button block color="primary" loading={submitting} onClick={submit}>
-        提交订单并模拟支付
+        提交订单（演示）
       </Button>
 
       <CouponSelector

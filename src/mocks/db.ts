@@ -1,4 +1,4 @@
-import type {
+﻿import type {
   Address,
   CartItem,
   Coupon,
@@ -17,392 +17,240 @@ const now = () => Date.now();
 
 const store: Store = {
   id: "s_1001",
-  name: "小李川菜馆",
-  minOrderAmount: 20,
-  deliveryFee: 3,
+  name: "港味馄饨·中环店",
+  minOrderAmount: 38,
+  deliveryFee: 6,
   supportModes: ["DINE_IN", "DELIVERY", "PICKUP"],
 };
 
 const tables: Table[] = [
   { tableNo: "A01", capacity: 2 },
-  { tableNo: "A02", capacity: 4 },
+  { tableNo: "A02", capacity: 2 },
   { tableNo: "A03", capacity: 4 },
-  { tableNo: "A04", capacity: 6 },
-  { tableNo: "B01", capacity: 2 },
-  { tableNo: "B02", capacity: 4 },
+  { tableNo: "A05", capacity: 4 },
+  { tableNo: "B01", capacity: 4 },
   { tableNo: "B03", capacity: 6 },
-  { tableNo: "B10", capacity: 6 },
   { tableNo: "C01", capacity: 8 },
   { tableNo: "C02", capacity: 8 },
-  { tableNo: "D01", capacity: 10 },
 ];
 
 const addresses: Address[] = [
   {
     id: "addr_1",
-    name: "张三",
-    phone: "13800000000",
-    detail: "浦东新区示例路 88 号 3 单元 1202",
-    lng: 121.521,
-    lat: 31.227,
+    name: "陈小姐",
+    phone: "+852 9123 0001",
+    detail: "九龙尖沙咀广东道 88 号 12F",
+    lng: 114.1722,
+    lat: 22.2976,
   },
   {
     id: "addr_2",
-    name: "李四",
-    phone: "13900000000",
-    detail: "徐汇区示例路 66 号 2 单元 802",
-    lng: 121.44,
-    lat: 31.192,
+    name: "林先生",
+    phone: "+852 9733 0002",
+    detail: "香港岛中环皇后大道中 120 号 9F",
+    lng: 114.1577,
+    lat: 22.2819,
   },
   {
     id: "addr_3",
-    name: "王五",
-    phone: "13700000000",
-    detail: "静安区南京西路 188 号 5 楼 501",
-    lng: 121.457,
-    lat: 31.229,
-  },
-  {
-    id: "addr_4",
-    name: "赵六",
-    phone: "13600000000",
-    detail: "长宁区虹桥路 520 号 1 幢 901",
-    lng: 121.403,
-    lat: 31.214,
+    name: "黄太",
+    phone: "+852 9344 0003",
+    detail: "新界沙田好运中心 3 座 15F",
+    lng: 114.1956,
+    lat: 22.3831,
   },
 ];
 
 const menu: MenuPayload = {
   categories: [
-    { id: "c_1", name: "招牌", sort: 1 },
-    { id: "c_2", name: "川味热菜", sort: 2 },
-    { id: "c_3", name: "主食", sort: 3 },
-    { id: "c_4", name: "小吃", sort: 4 },
-    { id: "c_5", name: "饮品", sort: 5 },
-    { id: "c_6", name: "汤羹", sort: 6 },
+    { id: "c_1", name: "招牌馄饨", sort: 1 },
+    { id: "c_2", name: "云吞面", sort: 2 },
+    { id: "c_3", name: "港式小食", sort: 3 },
+    { id: "c_4", name: "饮品甜品", sort: 4 },
   ],
   items: [
     {
       id: "p_101",
-      categoryId: "c_2",
-      name: "宫保鸡丁",
-      image: "https://images.unsplash.com/photo-1547592180-85f173990554?w=800",
-      basePrice: 28,
+      categoryId: "c_1",
+      name: "鲜虾云吞汤",
+      image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=900",
+      basePrice: 36,
       specs: [
-        { id: "s1", name: "小份", delta: 0 },
-        { id: "s2", name: "大份", delta: 8 },
+        { id: "s1", name: "标准份", delta: 0 },
+        { id: "s2", name: "加大份", delta: 10 },
       ],
       addons: [
-        { id: "a1", name: "加花生", delta: 2 },
-        { id: "a2", name: "加米饭", delta: 3 },
+        { id: "a1", name: "加紫菜", delta: 3 },
+        { id: "a2", name: "加鱼蛋", delta: 6 },
       ],
-      tags: ["辣", "下饭"],
+      tags: ["鲜虾", "招牌", "清汤"],
     },
     {
       id: "p_102",
       categoryId: "c_1",
-      name: "麻婆豆腐",
-      image: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=800",
-      basePrice: 22,
-      specs: [{ id: "s1", name: "标准", delta: 0 }],
-      addons: [{ id: "a2", name: "加米饭", delta: 3 }],
-      tags: ["招牌"],
+      name: "蟹籽鲜肉云吞",
+      image: "https://images.unsplash.com/photo-1547592180-85f173990554?w=900",
+      basePrice: 34,
+      specs: [
+        { id: "s1", name: "标准份", delta: 0 },
+        { id: "s2", name: "双拼份", delta: 8 },
+      ],
+      addons: [
+        { id: "a3", name: "加溏心蛋", delta: 5 },
+        { id: "a4", name: "加菜心", delta: 4 },
+      ],
+      tags: ["鲜肉", "蟹籽", "人气"],
     },
     {
       id: "p_103",
-      categoryId: "c_2",
-      name: "水煮牛肉",
-      image: "https://images.unsplash.com/photo-1626804475297-41608ea09aeb?w=800",
+      categoryId: "c_1",
+      name: "松露鸡汤云吞",
+      image: "https://images.unsplash.com/photo-1559847844-5315695dadae?w=900",
       basePrice: 42,
       specs: [
-        { id: "s1", name: "标准", delta: 0 },
-        { id: "s2", name: "加量", delta: 12 },
+        { id: "s1", name: "标准份", delta: 0 },
+        { id: "s2", name: "尊享份", delta: 12 },
       ],
       addons: [
-        { id: "a4", name: "加豆皮", delta: 4 },
-        { id: "a2", name: "加米饭", delta: 3 },
+        { id: "a5", name: "加松露酱", delta: 8 },
+        { id: "a6", name: "加金针菇", delta: 4 },
       ],
-      tags: ["重辣", "热销"],
+      tags: ["鸡汤", "浓郁", "推荐"],
     },
     {
-      id: "p_104",
+      id: "p_201",
       categoryId: "c_2",
-      name: "鱼香肉丝",
-      image: "https://images.unsplash.com/photo-1563245372-f21724e3856d?w=800",
-      basePrice: 29,
+      name: "鲜虾云吞面",
+      image: "https://images.unsplash.com/photo-1617093727343-374698b1b08d?w=900",
+      basePrice: 38,
       specs: [
-        { id: "s1", name: "标准", delta: 0 },
-        { id: "s2", name: "大份", delta: 8 },
+        { id: "s1", name: "细面", delta: 0 },
+        { id: "s2", name: "河粉", delta: 2 },
       ],
-      addons: [{ id: "a2", name: "加米饭", delta: 3 }],
-      tags: ["微辣", "下饭"],
+      addons: [
+        { id: "a7", name: "加面", delta: 6 },
+        { id: "a8", name: "加牛丸", delta: 8 },
+      ],
+      tags: ["饱腹", "经典"],
     },
     {
-      id: "p_105",
-      categoryId: "c_1",
-      name: "回锅肉",
-      image: "https://images.unsplash.com/photo-1559847844-5315695dadae?w=800",
-      basePrice: 32,
+      id: "p_202",
+      categoryId: "c_2",
+      name: "叉烧云吞面",
+      image: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=900",
+      basePrice: 40,
       specs: [
-        { id: "s1", name: "标准", delta: 0 },
-        { id: "s2", name: "大份", delta: 10 },
+        { id: "s1", name: "细面", delta: 0 },
+        { id: "s2", name: "公仔面", delta: 2 },
       ],
-      addons: [{ id: "a2", name: "加米饭", delta: 3 }],
-      tags: ["招牌", "家常"],
+      addons: [
+        { id: "a9", name: "加叉烧", delta: 10 },
+        { id: "a10", name: "加青菜", delta: 4 },
+      ],
+      tags: ["叉烧", "港味"],
     },
     {
-      id: "p_106",
-      categoryId: "c_1",
-      name: "辣子鸡",
-      image: "https://images.unsplash.com/photo-1625944230932-76c5dc64f6f5?w=800",
-      basePrice: 36,
+      id: "p_203",
+      categoryId: "c_2",
+      name: "双拼云吞面",
+      image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=900",
+      basePrice: 45,
       specs: [
-        { id: "s1", name: "中辣", delta: 0 },
-        { id: "s2", name: "特辣", delta: 0 },
+        { id: "s1", name: "虾+肉", delta: 0 },
+        { id: "s2", name: "虾+牛", delta: 4 },
       ],
-      addons: [{ id: "a1", name: "加花生", delta: 2 }],
-      tags: ["香辣", "招牌"],
+      addons: [
+        { id: "a11", name: "加鱼片", delta: 8 },
+        { id: "a12", name: "加辣油", delta: 0 },
+      ],
+      tags: ["双拼", "招牌"],
     },
     {
-      id: "p_107",
+      id: "p_301",
       categoryId: "c_3",
-      name: "扬州炒饭",
-      image: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=800",
-      basePrice: 18,
-      specs: [{ id: "s1", name: "标准", delta: 0 }],
-      addons: [{ id: "a5", name: "加蛋", delta: 3 }],
-      tags: ["主食"],
-    },
-    {
-      id: "p_108",
-      categoryId: "c_3",
-      name: "红油抄手",
-      image: "https://images.unsplash.com/photo-1617622141573-6f4f67f54874?w=800",
-      basePrice: 20,
-      specs: [
-        { id: "s1", name: "8个", delta: 0 },
-        { id: "s2", name: "12个", delta: 6 },
-      ],
-      addons: [{ id: "a6", name: "加香菜", delta: 1 }],
-      tags: ["主食", "辣"],
-    },
-    {
-      id: "p_109",
-      categoryId: "c_3",
-      name: "担担面",
-      image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=800",
-      basePrice: 19,
-      specs: [
-        { id: "s1", name: "标准", delta: 0 },
-        { id: "s2", name: "加面", delta: 4 },
-      ],
-      addons: [{ id: "a7", name: "加卤蛋", delta: 3 }],
-      tags: ["主食", "畅销"],
-    },
-    {
-      id: "p_110",
-      categoryId: "c_4",
-      name: "红糖糍粑",
-      image: "https://images.unsplash.com/photo-1514517093094-4f4f34d8fd77?w=800",
-      basePrice: 14,
-      specs: [{ id: "s1", name: "标准", delta: 0 }],
-      addons: [],
-      tags: ["甜品", "小吃"],
-    },
-    {
-      id: "p_111",
-      categoryId: "c_4",
-      name: "炸酥肉",
-      image: "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=800",
+      name: "咖喱鱼蛋",
+      image: "https://images.unsplash.com/photo-1473093226795-af9932fe5856?w=900",
       basePrice: 22,
       specs: [
         { id: "s1", name: "小份", delta: 0 },
         { id: "s2", name: "大份", delta: 8 },
       ],
-      addons: [{ id: "a8", name: "加椒盐", delta: 1 }],
-      tags: ["小吃", "脆香"],
+      addons: [{ id: "a13", name: "加萝卜", delta: 4 }],
+      tags: ["小食", "微辣"],
     },
     {
-      id: "p_112",
-      categoryId: "c_4",
-      name: "口水鸡",
-      image: "https://images.unsplash.com/photo-1532550907401-a500c9a57435?w=800",
-      basePrice: 26,
-      specs: [{ id: "s1", name: "标准", delta: 0 }],
-      addons: [{ id: "a6", name: "加香菜", delta: 1 }],
-      tags: ["凉菜", "热门"],
-    },
-    {
-      id: "p_113",
-      categoryId: "c_5",
-      name: "酸梅汤",
-      image: "https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=800",
-      basePrice: 8,
+      id: "p_302",
+      categoryId: "c_3",
+      name: "港式炸云吞",
+      image: "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=900",
+      basePrice: 24,
       specs: [
-        { id: "s1", name: "中杯", delta: 0 },
-        { id: "s2", name: "大杯", delta: 3 },
+        { id: "s1", name: "6只", delta: 0 },
+        { id: "s2", name: "10只", delta: 10 },
       ],
-      addons: [{ id: "a9", name: "加冰", delta: 0 }],
-      tags: ["解辣"],
+      addons: [{ id: "a14", name: "加甜辣酱", delta: 2 }],
+      tags: ["香脆", "下饭"],
     },
     {
-      id: "p_114",
-      categoryId: "c_5",
-      name: "鲜榨柠檬茶",
-      image: "https://images.unsplash.com/photo-1499638673689-79a0b5115d87?w=800",
-      basePrice: 12,
+      id: "p_303",
+      categoryId: "c_3",
+      name: "香葱牛肉丸",
+      image: "https://images.unsplash.com/photo-1516684732162-798a0062be99?w=900",
+      basePrice: 26,
+      specs: [{ id: "s1", name: "标准份", delta: 0 }],
+      addons: [{ id: "a15", name: "加汤底", delta: 3 }],
+      tags: ["肉丸", "热卖"],
+    },
+    {
+      id: "p_401",
+      categoryId: "c_4",
+      name: "冻柠茶",
+      image: "https://images.unsplash.com/photo-1499638673689-79a0b5115d87?w=900",
+      basePrice: 14,
       specs: [
         { id: "s1", name: "少糖", delta: 0 },
         { id: "s2", name: "正常糖", delta: 0 },
       ],
-      addons: [{ id: "a9", name: "加冰", delta: 0 }],
-      tags: ["饮品", "清爽"],
+      addons: [{ id: "a16", name: "加柠檬片", delta: 2 }],
+      tags: ["解腻", "经典"],
     },
     {
-      id: "p_115",
-      categoryId: "c_5",
-      name: "冰豆花",
-      image: "https://images.unsplash.com/photo-1627735483798-0ac51442f0ca?w=800",
-      basePrice: 10,
-      specs: [{ id: "s1", name: "碗", delta: 0 }],
-      addons: [{ id: "a10", name: "加红糖", delta: 1 }],
-      tags: ["甜品", "饮品"],
-    },
-    {
-      id: "p_116",
-      categoryId: "c_2",
-      name: "干锅肥肠",
-      image: "https://images.unsplash.com/photo-1544025162-d76694265947?w=800",
-      basePrice: 48,
-      specs: [
-        { id: "s1", name: "标准", delta: 0 },
-        { id: "s2", name: "加量", delta: 12 },
-      ],
-      addons: [{ id: "a11", name: "加土豆", delta: 4 }],
-      tags: ["重口", "下饭"],
-    },
-    {
-      id: "p_117",
-      categoryId: "c_2",
-      name: "毛血旺",
-      image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800",
-      basePrice: 58,
-      specs: [
-        { id: "s1", name: "中辣", delta: 0 },
-        { id: "s2", name: "特辣", delta: 0 },
-      ],
-      addons: [{ id: "a12", name: "加午餐肉", delta: 6 }],
-      tags: ["招牌", "聚餐"],
-    },
-    {
-      id: "p_118",
-      categoryId: "c_2",
-      name: "椒盐排骨",
-      image: "https://images.unsplash.com/photo-1600891963935-c1f6bb4d88f0?w=800",
-      basePrice: 46,
-      specs: [
-        { id: "s1", name: "小份", delta: 0 },
-        { id: "s2", name: "大份", delta: 10 },
-      ],
-      addons: [],
-      tags: ["香脆", "热销"],
-    },
-    {
-      id: "p_119",
-      categoryId: "c_3",
-      name: "腊味煲仔饭",
-      image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800",
-      basePrice: 26,
-      specs: [{ id: "s1", name: "标准", delta: 0 }],
-      addons: [{ id: "a13", name: "加香肠", delta: 5 }],
-      tags: ["主食", "饱腹"],
-    },
-    {
-      id: "p_120",
-      categoryId: "c_3",
-      name: "酸辣粉",
-      image: "https://images.unsplash.com/photo-1617093727343-374698b1b08d?w=800",
-      basePrice: 18,
-      specs: [
-        { id: "s1", name: "标准", delta: 0 },
-        { id: "s2", name: "加粉", delta: 4 },
-      ],
-      addons: [{ id: "a14", name: "加牛肉", delta: 7 }],
-      tags: ["酸辣", "主食"],
-    },
-    {
-      id: "p_121",
+      id: "p_402",
       categoryId: "c_4",
-      name: "椒麻鸡爪",
-      image: "https://images.unsplash.com/photo-1516684732162-798a0062be99?w=800",
-      basePrice: 24,
-      specs: [{ id: "s1", name: "6只", delta: 0 }],
-      addons: [],
-      tags: ["冷盘", "开胃"],
-    },
-    {
-      id: "p_122",
-      categoryId: "c_4",
-      name: "炸鲜奶",
-      image: "https://images.unsplash.com/photo-1473093226795-af9932fe5856?w=800",
+      name: "冻奶茶",
+      image: "https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=900",
       basePrice: 16,
-      specs: [{ id: "s1", name: "标准", delta: 0 }],
-      addons: [{ id: "a15", name: "加炼乳", delta: 2 }],
-      tags: ["甜品", "小吃"],
+      specs: [
+        { id: "s1", name: "小杯", delta: 0 },
+        { id: "s2", name: "大杯", delta: 4 },
+      ],
+      addons: [{ id: "a17", name: "加珍珠", delta: 3 }],
+      tags: ["港式", "人气"],
     },
     {
-      id: "p_123",
-      categoryId: "c_5",
+      id: "p_403",
+      categoryId: "c_4",
       name: "杨枝甘露",
-      image: "https://images.unsplash.com/photo-1497534446932-c925b458314e?w=800",
-      basePrice: 16,
-      specs: [
-        { id: "s1", name: "中杯", delta: 0 },
-        { id: "s2", name: "大杯", delta: 3 },
-      ],
-      addons: [{ id: "a9", name: "加冰", delta: 0 }],
-      tags: ["饮品", "人气"],
-    },
-    {
-      id: "p_124",
-      categoryId: "c_6",
-      name: "番茄蛋花汤",
-      image: "https://images.unsplash.com/photo-1547592180-85f173990554?w=800",
-      basePrice: 16,
-      specs: [
-        { id: "s1", name: "小份", delta: 0 },
-        { id: "s2", name: "大份", delta: 6 },
-      ],
-      addons: [{ id: "a16", name: "加豆腐", delta: 3 }],
-      tags: ["汤羹", "家常"],
-    },
-    {
-      id: "p_125",
-      categoryId: "c_6",
-      name: "菌菇老鸭汤",
-      image: "https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?w=800",
-      basePrice: 38,
-      specs: [
-        { id: "s1", name: "2人份", delta: 0 },
-        { id: "s2", name: "4人份", delta: 18 },
-      ],
-      addons: [{ id: "a17", name: "加粉丝", delta: 4 }],
-      tags: ["滋补", "汤羹"],
+      image: "https://images.unsplash.com/photo-1497534446932-c925b458314e?w=900",
+      basePrice: 20,
+      specs: [{ id: "s1", name: "标准杯", delta: 0 }],
+      addons: [{ id: "a18", name: "加西米", delta: 2 }],
+      tags: ["甜品", "推荐"],
     },
   ],
 };
 
 const coupons: Coupon[] = [
-  { id: "cp_10", title: "满30减10", threshold: 30, discount: 10, scope: "STORE" },
-  { id: "cp_5", title: "无门槛减5", threshold: 0, discount: 5, scope: "STORE" },
-  { id: "cp_20", title: "满60减20", threshold: 60, discount: 20, scope: "STORE" },
-  { id: "cp_12", title: "满88减12", threshold: 88, discount: 12, scope: "STORE" },
+  { id: "cp_new", title: "新客立减 5", threshold: 30, discount: 5, scope: "STORE" },
+  { id: "cp_set", title: "双人套餐减 12", threshold: 68, discount: 12, scope: "STORE" },
+  { id: "cp_night", title: "夜宵档减 8", threshold: 50, discount: 8, scope: "STORE" },
+  { id: "cp_88", title: "满 88 减 15", threshold: 88, discount: 15, scope: "STORE" },
 ];
 
 const paymentMethods: PaymentMethod[] = [
-  { id: "ONLINE", name: "在线支付", enabledModes: ["DINE_IN", "DELIVERY", "PICKUP"] },
-  { id: "COD", name: "货到付款", enabledModes: ["DELIVERY"] },
-  { id: "PAY_AT_STORE", name: "到店支付", enabledModes: ["DINE_IN", "PICKUP"] },
+  { id: "PAY_AT_STORE", name: "到店付款", enabledModes: ["DINE_IN", "PICKUP"] },
+  { id: "ONLINE", name: "在线支付（演示预留）", enabledModes: ["DINE_IN", "DELIVERY", "PICKUP"] },
+  { id: "COD", name: "外送货到付款", enabledModes: ["DELIVERY"] },
 ];
 
 type InternalOrder = {
@@ -478,8 +326,7 @@ export const db = {
       tableNo: input.tableNo,
       pickupTime: input.pickupTime,
       items: input.items,
-      discounts:
-        input.discount > 0 ? [{ name: "优惠券", amount: input.discount }] : [],
+      discounts: input.discount > 0 ? [{ name: "优惠减免", amount: input.discount }] : [],
       deliveryFee: input.deliveryFee,
       totalAmount: input.totalAmount,
       payableAmount: input.payableAmount,
@@ -495,17 +342,19 @@ export const db = {
         operator: "USER",
       },
     ];
+
     orders.set(id, { order, timeline });
     return order;
   },
   confirmPayment(orderId: string) {
     const entry = orders.get(orderId);
     if (!entry) return null;
+
     entry.order.payStatus = "PAID";
     entry.order.orderStatus = "PAID";
     pushTimeline(orderId, {
       code: "PAID",
-      text: "支付成功",
+      text: "支付已确认（演示）",
       ts: now(),
       operator: "USER",
     });
@@ -521,16 +370,16 @@ export const db = {
     const all = [...orders.values()].map((entry) => entry.order as MerchantOrder);
     return all.filter((order) => {
       if (status === "NEW") return order.orderStatus === "PAID";
-      if (status === "PREPARING")
-        return ["ACCEPTED", "PREPARING", "DELIVERING", "READY_FOR_PICKUP"].includes(
-          order.orderStatus,
-        );
+      if (status === "PREPARING") {
+        return ["ACCEPTED", "PREPARING", "DELIVERING", "READY_FOR_PICKUP"].includes(order.orderStatus);
+      }
       return ["DONE", "CANCELLED"].includes(order.orderStatus);
     });
   },
   merchantAccept(orderId: string) {
     const entry = orders.get(orderId);
     if (!entry) return null;
+
     entry.order.orderStatus = "ACCEPTED";
     pushTimeline(orderId, {
       code: "ACCEPTED",
@@ -543,13 +392,15 @@ export const db = {
   merchantStatus(orderId: string, nextStatus: OrderStatus, reason?: string) {
     const entry = orders.get(orderId);
     if (!entry) return null;
+
     entry.order.orderStatus = nextStatus;
     if (nextStatus === "CANCELLED" && reason) {
       entry.order.cancelReason = reason;
     }
+
     pushTimeline(orderId, {
       code: nextStatus,
-      text: nextStatus === "CANCELLED" && reason ? `已取消（${reason}）` : statusText(nextStatus),
+      text: nextStatus === "CANCELLED" && reason ? `订单已取消（${reason}）` : statusText(nextStatus),
       ts: now(),
       operator: "MERCHANT",
     });

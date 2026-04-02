@@ -1,9 +1,9 @@
-# 点餐系统 MVP — 一键启动 Prompt
+﻿# 香港馄饨扫码点餐 Demo - 一键执行 Prompt
 
 ## 使用方法
-1. 确认当前目录包含 `docs/spec.md` 与 `docs/checklist.md`。  
-2. 启动 Codex 或 Claude Code。  
-3. 复制下面完整 Prompt，粘贴执行。  
+1. 确认目录包含：`docs/spec.md`、`docs/checklist.md`。
+2. 启动 Codex 或 Claude Code。
+3. 粘贴下方 Prompt 执行。
 
 ## Prompt
 
@@ -13,61 +13,57 @@ Read these files first:
 - docs/checklist.md
 
 Goal:
-Build a pure-frontend React MVP demo with mock APIs only.
-Do not integrate real backend/payment/map/push services.
+Retrofit the existing ordering project into a Hong Kong wonton QR-ordering demo for internal sales review.
+Do NOT rebuild from scratch.
 
 Execution Mode:
 - Default to autonomous execution.
-- Do not stop for minor ambiguity.
-- Only pause if one of these happens:
+- Do not pause for minor ambiguity.
+- Pause only when:
   1) architecture-level conflict,
-  2) requirement conflict that changes demo flow,
+  2) requirement conflict affecting demo flow,
   3) core flow cannot be validated end-to-end.
 
 If paused:
-- Log blocker in DECISIONS.md with:
-  - Date
-  - Blocker
-  - Why it blocks
-  - Options considered
-  - Proposed decision
+- Log blocker in DECISIONS.md with date, blocker, impact, options, and proposed decision.
 
-Non-blocking ambiguity:
+For non-blocking ambiguity:
 - Make a reasonable local decision and log it in DECISIONS.md.
 
 Hard Constraints:
-- Keep scope to 5 pages:
+- Keep existing route skeleton:
   - /
   - /store/:storeId/menu
   - /store/:storeId/checkout
   - /orders/:orderId
   - /merchant/orders
-- Keep PICKUP mode as branch logic only. No extra pages.
-- Use MSW for mock APIs.
-- Keep user side mobile-first and merchant side desktop-friendly.
-- Reuse components and shared types.
+- Replace current generic/Sichuan menu and copy with Hong Kong wonton brand content.
+- Prioritize fixing Chinese copy quality and garbled text.
+- Keep SPA + MSW architecture.
+- Payment in v1 must remain simulated/reserved (no real local payment integration such as GCash).
+- AI in v1 must be lightweight recommendation/Q&A only.
+- Do not build full natural-language order agent.
+- Do not add membership marketing automation features.
 
 Build Order:
-1) Project skeleton + dependencies + router + base theme.
-2) Types + API client + MSW handlers + seed data.
-3) Core pages in order:
-   Entry -> Menu/Cart -> Checkout -> OrderDetail -> MerchantBoard
-4) Status sync:
-   Merchant updates should be visible on user order detail via polling (3-5s).
-5) Empty/error/loading states.
-6) Verification and fixes.
+1) Copy and text quality pass (fix garbled strings, unify UI copy).
+2) Brand and SKU data retrofit (Hong Kong wonton categories/items/specs/addons).
+3) Visual style retrofit (simple, flat, light, Apple-like direction).
+4) Checkout payment wording and flow alignment (reserved/simulated).
+5) Lightweight AI recommendation entry and suggested prompts.
+6) End-to-end demo validation and final cleanup.
 
 Verification Requirements:
-- Run build successfully.
-- Verify the full demo path defined in docs/spec.md.
-- Confirm data consistency between user and merchant views.
-- Confirm status transition timeline updates within 5 seconds after merchant action.
+- Build succeeds.
+- Lint/type checks used by project remain passing.
+- Demo flow runs end-to-end:
+  customer scan/entry -> menu -> checkout -> order detail -> merchant board status update -> customer status sync.
+- Menu and brand language are Hong Kong wonton aligned.
+- UI style is visibly simplified and flattened compared to baseline.
 
 Output Format at the end:
-1) What was built (short summary)
-2) What decisions were made (from DECISIONS.md)
-3) What remains (if anything)
-4) How to run and demo the project
-
-Start now.
+1) What changed (by capability area)
+2) Decisions made (from DECISIONS.md)
+3) Remaining gaps (if any)
+4) How to run and demo internally
 ```
